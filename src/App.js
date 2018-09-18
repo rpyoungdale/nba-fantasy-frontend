@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import UserHome from "./Containers/UserHome";
+import NavBar from "./Components/NavBar";
 
 class App extends Component {
   constructor() {
@@ -14,6 +15,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <NavBar />
         <UserHome />
       </div>
     );
