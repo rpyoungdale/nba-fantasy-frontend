@@ -3,6 +3,8 @@ import "./App.css";
 import UserHome from "./Containers/UserHome";
 import NavBar from "./Components/NavBar";
 
+const baseURL = "http://localhost:3000";
+
 class App extends Component {
   constructor() {
     super();
@@ -15,7 +17,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavBar />
+        <NavBar findPlayer={this.findPlayer} />
         <UserHome />
       </div>
     );
