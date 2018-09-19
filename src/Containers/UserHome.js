@@ -1,5 +1,7 @@
 import React from "react";
 
+const baseURL = "http://localhost:3000";
+
 class UserHome extends React.Component {
   constructor() {
     super();
@@ -10,7 +12,7 @@ class UserHome extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:3000/all-teams")
+    fetch(`${baseURL}/all-teams`)
       .then(res => res.json())
       .then(json => {
         this.setState({
