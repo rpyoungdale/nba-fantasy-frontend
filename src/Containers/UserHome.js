@@ -11,21 +11,11 @@ class UserHome extends React.Component {
     };
   }
 
-  componentDidMount() {
-    fetch(`${baseURL}/all-teams`)
-      .then(res => res.json())
-      .then(json => {
-        this.setState({
-          allTeams: json.league.vegas
-        });
-      });
-  }
-
   render() {
     console.log(this.state);
     return (
       <div>
-        {this.state.allTeams.map(team => {
+        {this.props.allTeams.map(team => {
           return <h3 key={team.teamId}>{team.fullName}</h3>;
         })}
       </div>

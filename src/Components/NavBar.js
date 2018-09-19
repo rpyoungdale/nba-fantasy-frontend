@@ -21,7 +21,8 @@ class NavBar extends React.Component {
   };
 
   parsePlayers = players => {
-    // debugger;
+    //--Parses json into an array of the players first and last names
+    //--put together and also saves the detailed player info for later
     let arr = [];
     players.league.standard.forEach(player => {
       arr.push(`${player.firstName} ${player.lastName}`);
@@ -48,20 +49,47 @@ class NavBar extends React.Component {
         return player.toLowerCase().includes(first);
       }
     });
-    debugger;
+    this.getPlayerDetails(searched);
+  };
+
+  getPlayerDetails = player => {
+    // debugger;
+    let splitPlayer = player[0].split(" ");
+
+    let foundPlayer = this.binarySearch(
+      this.state.playerDetails,
+      splitPlayer[1],
+      splitPlayer[0]
+    );
+
+    this.props.displayPlayerInfo(foundPlayer);
+  };
+
+  binarySearch = (arr, last, first) => {
+    //recursively searches detailed players list for matching name
+    if (arr.length === 1) {
+      return arr[0];
+    }
+    let length = arr.length;
+    let midPoint = Math.floor(length / 2);
+
+    if (arr[midPoint].lastName === last && arr[midPoint].firstName === first) {
+      return arr[midPoint];
+    } else if (arr[midPoint].lastName > last) {
+      let newArr = arr.slice(0, midPoint);
+      return this.binarySearch(newArr, last);
+    } else if (arr[midPoint].lastName <= last) {
+      let newArr = arr.slice(midPoint, arr.length);
+      return this.binarySearch(newArr, last);
+    } else {
+      return arr;
+    }
   };
 
   componentDidMount() {
     fetch(`${baseURL}/find-player`)
       .then(res => res.json())
-      .then(
-        json => this.parsePlayers(json)
-        // console.log(
-        //   json.league.standard.find(person => {
-        //     return person.firstName.includes(parsedPlayer[0]);
-        //   })
-        // )
-      );
+      .then(json => this.parsePlayers(json));
   }
 
   // findPlayer = e => {
