@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import UserHome from "./Containers/UserHome";
+import LandingPage from "./Containers/LandingPage";
 import Login from "./Containers/Login";
 import NavBar from "./Components/NavBar";
 import PlayerProfile from "./Components/PlayerProfile";
@@ -13,6 +14,9 @@ class App extends Component {
 
     this.state = {
       loggedIn: false,
+      signIn: false,
+      signUp: false,
+      currentUser: {},
       allTeams: [],
       playerProfile: false,
       searchedPlayer: {}
@@ -27,6 +31,24 @@ class App extends Component {
           allTeams: json.league.vegas
         });
       });
+
+    if (localStorage.getItem("token")) {
+      // debugger;
+      fetch(`${baseURL}/user`, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      })
+        .then(res => res.json())
+        .then(json =>
+          this.setState({
+            currentUser: json,
+            loggedIn: true
+          })
+        );
+    }
   }
 
   displayPlayerInfo = searchedPlayer => {
@@ -36,11 +58,62 @@ class App extends Component {
     });
   };
 
+  setUser = () => {
+    // debugger;
+    fetch(`${baseURL}/user`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          currentUser: json,
+          loggedIn: true,
+          signIn: false,
+          signUp: false
+        });
+      });
+  };
+
+  handleSignIn = () => {
+    this.setState({
+      signIn: true,
+      signUp: false
+    });
+  };
+
+  handleSignUp = () => {
+    this.setState({
+      signUp: true,
+      signIn: false
+    });
+  };
+
+  handleLogOut = () => {
+    localStorage.removeItem("token");
+    this.setState({
+      loggedIn: false,
+      currentUser: {},
+      signIn: false,
+      signIn: false
+    });
+  };
+
   render() {
     console.log(this.state);
     return (
       <div>
-        <NavBar displayPlayerInfo={this.displayPlayerInfo} />
+        <NavBar
+          displayPlayerInfo={this.displayPlayerInfo}
+          loggedIn={this.state.loggedIn}
+          currentUser={this.state.currentUser}
+          handleSignIn={this.handleSignIn}
+          handleSignUp={this.handleSignUp}
+          handleLogOut={this.handleLogOut}
+        />
         {this.state.loggedIn ? (
           this.state.playerProfile ? (
             <PlayerProfile
@@ -48,10 +121,18 @@ class App extends Component {
               allTeams={this.state.allTeams}
             />
           ) : (
-            <UserHome allTeams={this.state.allTeams} />
+            <div>
+              <UserHome allTeams={this.state.allTeams} />
+            </div>
           )
+        ) : this.state.signIn || this.state.signUp ? (
+          <Login
+            setUser={this.setUser}
+            signIn={this.state.signIn}
+            signUp={this.state.signUp}
+          />
         ) : (
-          <Login />
+          <LandingPage />
         )}
       </div>
     );

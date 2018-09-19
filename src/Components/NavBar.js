@@ -104,10 +104,10 @@ class NavBar extends React.Component {
   }
 
   render() {
-    console.log(this.state);
+    console.log(this.props);
     return (
       <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand">NBAFantasy</a>
+        <a className="navbar-brand">NBAFantasy 🏀</a>
         <button
           className="navbar-toggler"
           type="button"
@@ -119,55 +119,97 @@ class NavBar extends React.Component {
         >
           <span className="navbar-toggler-icon" />
         </button>
+        {this.props.loggedIn ? (
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item active">
+                <a className="nav-link">
+                  Roster <span className="sr-only">(current)</span>
+                </a>
+              </li>
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item active">
-              <a className="nav-link">
-                Roster <span className="sr-only">(current)</span>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link">Today's Games</a>
-            </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                id="navbarDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Dropdown
-              </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a className="dropdown-item">Action</a>
-                <a className="dropdown-item">Another action</a>
-                <div className="dropdown-divider" />
-                <a className="dropdown-item">Something else here</a>
-              </div>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link disabled">Disabled</a>
-            </li>
-          </ul>
-          <form className="form-inline my-2 my-lg-0" onSubmit={this.findPlayer}>
-            <input
-              className="form-control mr-sm-2"
-              type="search"
-              placeholder="Player Lookup"
-              aria-label="Search"
-              onChange={this.updatePlayer}
-            />
-            <button
-              className="btn btn-outline-success my-2 my-sm-0"
-              type="submit"
+              <li className="nav-item">
+                <a className="nav-link">Today's Games</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" onClick={this.props.handleLogOut}>
+                  Logout {this.props.currentUser.first_name}
+                </a>
+              </li>
+            </ul>
+            <form
+              className="form-inline my-2 my-lg-0"
+              onSubmit={this.findPlayer}
             >
-              Search
-            </button>
-          </form>
-        </div>
+              <input
+                className="form-control mr-sm-2"
+                type="search"
+                placeholder="Player Lookup"
+                aria-label="Search"
+                onChange={this.updatePlayer}
+              />
+              <button
+                className="btn btn-outline-success my-2 my-sm-0"
+                type="submit"
+              >
+                Search
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <a className="nav-link">Today's Games</a>
+              </li>
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  id="navbarDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Login
+                </a>
+                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a
+                    className="dropdown-item"
+                    onClick={this.props.handleSignIn}
+                  >
+                    Sign In
+                  </a>
+                  <div className="dropdown-divider" />
+                  <a
+                    className="dropdown-item"
+                    onClick={this.props.handleSignUp}
+                  >
+                    Sign Up
+                  </a>
+                </div>
+              </li>
+            </ul>
+            <form
+              className="form-inline my-2 my-lg-0"
+              onSubmit={this.findPlayer}
+            >
+              <input
+                className="form-control mr-sm-2"
+                type="search"
+                placeholder="Player Lookup"
+                aria-label="Search"
+                onChange={this.updatePlayer}
+              />
+              <button
+                className="btn btn-outline-success my-2 my-sm-0"
+                type="submit"
+              >
+                Search
+              </button>
+            </form>
+          </div>
+        )}
       </nav>
     );
   }
