@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import UserHome from "./Containers/UserHome";
+import Login from "./Containers/Login";
 import NavBar from "./Components/NavBar";
 import PlayerProfile from "./Components/PlayerProfile";
 
@@ -11,6 +12,7 @@ class App extends Component {
     super();
 
     this.state = {
+      loggedIn: false,
       allTeams: [],
       playerProfile: false,
       searchedPlayer: {}
@@ -39,13 +41,17 @@ class App extends Component {
     return (
       <div>
         <NavBar displayPlayerInfo={this.displayPlayerInfo} />
-        {this.state.playerProfile ? (
-          <PlayerProfile
-            searchedPlayer={this.state.searchedPlayer}
-            allTeams={this.state.allTeams}
-          />
+        {this.state.loggedIn ? (
+          this.state.playerProfile ? (
+            <PlayerProfile
+              searchedPlayer={this.state.searchedPlayer}
+              allTeams={this.state.allTeams}
+            />
+          ) : (
+            <UserHome allTeams={this.state.allTeams} />
+          )
         ) : (
-          <UserHome allTeams={this.state.allTeams} />
+          <Login />
         )}
       </div>
     );

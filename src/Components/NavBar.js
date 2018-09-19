@@ -61,7 +61,7 @@ class NavBar extends React.Component {
       splitPlayer[1],
       splitPlayer[0]
     );
-
+    // debugger;
     this.props.displayPlayerInfo(foundPlayer);
   };
 
@@ -72,15 +72,26 @@ class NavBar extends React.Component {
     }
     let length = arr.length;
     let midPoint = Math.floor(length / 2);
-
-    if (arr[midPoint].lastName === last && arr[midPoint].firstName === first) {
-      return arr[midPoint];
+    // console.log(arr);
+    if (arr[midPoint].lastName === last) {
+      if (
+        arr[midPoint].lastName === last &&
+        arr[midPoint].firstName === first
+      ) {
+        return arr[midPoint];
+      } else if (arr[midPoint].firstName > first) {
+        let newArr = arr.slice(0, midPoint);
+        return this.binarySearch(newArr, last, first);
+      } else if (arr[midPoint].firstName <= first) {
+        let newArr = arr.slice(midPoint, arr.length);
+        return this.binarySearch(newArr, last, first);
+      }
     } else if (arr[midPoint].lastName > last) {
       let newArr = arr.slice(0, midPoint);
-      return this.binarySearch(newArr, last);
+      return this.binarySearch(newArr, last, first);
     } else if (arr[midPoint].lastName <= last) {
       let newArr = arr.slice(midPoint, arr.length);
-      return this.binarySearch(newArr, last);
+      return this.binarySearch(newArr, last, first);
     } else {
       return arr;
     }
@@ -91,23 +102,6 @@ class NavBar extends React.Component {
       .then(res => res.json())
       .then(json => this.parsePlayers(json));
   }
-
-  // findPlayer = e => {
-  //   // debugger;
-  //   e.preventDefault();
-  //   let parsedPlayer = this.state.player.split(" ");
-  //   // debugger;
-  //   fetch(`${baseURL}/find-player`)
-  //     .then(res => res.json())
-  //     .then(
-  //       json => this.parsePlayers(json)
-  //       // console.log(
-  //       //   json.league.standard.find(person => {
-  //       //     return person.firstName.includes(parsedPlayer[0]);
-  //       //   })
-  //       // )
-  //     );
-  // };
 
   render() {
     console.log(this.state);
