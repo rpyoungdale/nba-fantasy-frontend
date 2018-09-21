@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const baseURL = "http://localhost:3000";
 
@@ -123,13 +124,23 @@ class NavBar extends React.Component {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
               <li className="nav-item active">
-                <a className="nav-link">
-                  Roster <span className="sr-only">(current)</span>
-                </a>
+                <Link
+                  to="/roster"
+                  style={{ color: "#000000" }}
+                  className="nav-link"
+                >
+                  My Roster
+                </Link>
               </li>
 
               <li className="nav-item">
-                <a className="nav-link">Today's Games</a>
+                <Link
+                  to="/scores"
+                  style={{ color: "#000000" }}
+                  className="nav-link"
+                >
+                  Today's Games
+                </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" onClick={this.props.handleLogOut}>
@@ -159,7 +170,7 @@ class NavBar extends React.Component {
         ) : (
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
-              <li className="nav-item">
+              <li className="nav-item" onClick={this.props.viewScores}>
                 <a className="nav-link">Today's Games</a>
               </li>
               <li className="nav-item dropdown">
