@@ -48,13 +48,13 @@ class GameScores extends React.Component {
   };
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <div style={{ margin: 100 }}>
         <h1>{this.state.gameList.length} Games Today</h1>
         {this.state.gameList.length
           ? this.state.gameList.map(game => {
-              return <GameCard key={game.gameId} />;
+              return <GameCard key={game.gameId} gameInfo={game} />;
             })
           : null}
       </div>
