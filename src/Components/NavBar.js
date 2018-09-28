@@ -108,7 +108,9 @@ class NavBar extends React.Component {
     console.log(this.props);
     return (
       <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand">NBAFantasy 🏀</a>
+        <a className="navbar-brand">
+          NBAFantasy <span role="img">🏀</span>
+        </a>
         <button
           className="navbar-toggler"
           type="button"
@@ -123,16 +125,6 @@ class NavBar extends React.Component {
         {this.props.loggedIn ? (
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
-              <li className="nav-item active">
-                <Link
-                  to="/roster"
-                  style={{ color: "#000000" }}
-                  className="nav-link"
-                >
-                  My Roster
-                </Link>
-              </li>
-
               <li className="nav-item">
                 <Link
                   to="/scores"
@@ -140,6 +132,15 @@ class NavBar extends React.Component {
                   className="nav-link"
                 >
                   Today's Games
+                </Link>
+              </li>
+              <li className="nav-item active">
+                <Link
+                  to="/roster"
+                  style={{ color: "#000000" }}
+                  className="nav-link"
+                >
+                  My Roster
                 </Link>
               </li>
               <li className="nav-item">
@@ -167,63 +168,63 @@ class NavBar extends React.Component {
               </button>
             </form>
           </div>
-        ) : (
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item" onClick={this.props.viewScores}>
-                <a className="nav-link">Today's Games</a>
-              </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  id="navbarDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Login
-                </a>
-                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a
-                    className="dropdown-item"
-                    onClick={this.props.handleSignIn}
-                  >
-                    Sign In
-                  </a>
-                  <div className="dropdown-divider" />
-                  <a
-                    className="dropdown-item"
-                    onClick={this.props.handleSignUp}
-                  >
-                    Sign Up
-                  </a>
-                </div>
-              </li>
-            </ul>
-            <form
-              className="form-inline my-2 my-lg-0"
-              onSubmit={this.findPlayer}
-            >
-              <input
-                className="form-control mr-sm-2"
-                type="search"
-                placeholder="Player Lookup"
-                aria-label="Search"
-                onChange={this.updatePlayer}
-              />
-              <button
-                className="btn btn-outline-success my-2 my-sm-0"
-                type="submit"
-              >
-                Search
-              </button>
-            </form>
-          </div>
-        )}
+        ) : null}
       </nav>
     );
   }
 }
 
 export default NavBar;
+
+// <div className="collapse navbar-collapse" id="navbarSupportedContent">
+//   <ul className="navbar-nav mr-auto">
+//     <li className="nav-item" onClick={this.props.viewScores}>
+//       <a className="nav-link">Today's Games</a>
+//     </li>
+//     <li className="nav-item dropdown">
+//       <a
+//         className="nav-link dropdown-toggle"
+//         id="navbarDropdown"
+//         role="button"
+//         data-toggle="dropdown"
+//         aria-haspopup="true"
+//         aria-expanded="false"
+//       >
+//         Login
+//       </a>
+//       <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+//         <a
+//           className="dropdown-item"
+//           onClick={this.props.handleSignIn}
+//         >
+//           Sign In
+//         </a>
+//         <div className="dropdown-divider" />
+//         <a
+//           className="dropdown-item"
+//           onClick={this.props.handleSignUp}
+//         >
+//           Sign Up
+//         </a>
+//       </div>
+//     </li>
+//   </ul>
+//   <form
+//     className="form-inline my-2 my-lg-0"
+//     onSubmit={this.findPlayer}
+//   >
+//     <input
+//       className="form-control mr-sm-2"
+//       type="search"
+//       placeholder="Player Lookup"
+//       aria-label="Search"
+//       onChange={this.updatePlayer}
+//     />
+//     <button
+//       className="btn btn-outline-success my-2 my-sm-0"
+//       type="submit"
+//     >
+//       Search
+//     </button>
+//   </form>
+// </div>

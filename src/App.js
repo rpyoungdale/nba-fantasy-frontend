@@ -7,6 +7,7 @@ import NotLoggedIn from "./Containers/NotLoggedIn";
 import NavBar from "./Components/NavBar";
 import PlayerProfile from "./Components/PlayerProfile";
 import GameScores from "./Containers/GameScores";
+import Roster from "./Containers/Roster";
 import Login from "./Containers/Login";
 import SockJS from "sockjs-client";
 
@@ -60,7 +61,8 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       currentUser: {},
-      allTeams: []
+      allTeams: [],
+      searchedPlayer: {}
     };
   }
 
@@ -130,24 +132,37 @@ class App extends Component {
     });
   };
 
+  displayPlayerInfo = foundPlayer => {
+    this.setState({
+      searchedPlayer: foundPlayer
+    });
+  };
+
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <BrowserRouter>
         <div>
           <NavBar
-            displayPlayerInfo={this.displayPlayerInfo}
             loggedIn={this.state.loggedIn}
             currentUser={this.state.currentUser}
-            handleSignIn={this.handleSignIn}
-            handleSignUp={this.handleSignUp}
             handleLogOut={this.handleLogOut}
+            displayPlayerInfo={this.displayPlayerInfo}
+            allTeams={this.state.allTeams}
           />
-          {this.state.loggedIn ? (
-            <div>
-              <Redirect to="/scores" />
-              <Route exact path="/scores" render={() => <GameScores />} />
-            </div>
+          {this.state.loggedIn && localStorage.getItem("token") ? (
+            this.state.searchedPlayer.firstName ? (
+              <PlayerProfile
+                searchedPlayer={this.state.searchedPlayer}
+                allTeams={this.state.allTeams}
+              />
+            ) : (
+              <div>
+                <Redirect to="/scores" />
+                <Route exact path="/scores" render={() => <GameScores />} />
+                <Route exact path="/roster" render={() => <Roster />} />
+              </div>
+            )
           ) : (
             <Login setUser={this.setUser} />
           )}
