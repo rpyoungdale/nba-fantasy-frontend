@@ -5,7 +5,7 @@ import UserHome from "./Containers/UserHome";
 import LoggedIn from "./Containers/LoggedIn";
 import NotLoggedIn from "./Containers/NotLoggedIn";
 import NavBar from "./Components/NavBar";
-import PlayerProfile from "./Components/PlayerProfile";
+import PlayerSearch from "./Components/PlayerSearch";
 import GameScores from "./Containers/GameScores";
 import Roster from "./Containers/Roster";
 import Login from "./Containers/Login";
@@ -32,6 +32,15 @@ class App extends Component {
     //   console.log("close");
     // };
 
+    this.state = {
+      loggedIn: false,
+      currentUser: {},
+      allTeams: [],
+      searchedPlayer: {}
+    };
+  }
+
+  componentDidMount() {
     fetch(`${baseURL}/all-teams`)
       .then(res => res.json())
       .then(json => {
@@ -57,16 +66,7 @@ class App extends Component {
           })
         );
     }
-
-    this.state = {
-      loggedIn: false,
-      currentUser: {},
-      allTeams: [],
-      searchedPlayer: {}
-    };
   }
-
-  componentDidMount() {}
 
   changeToLoggedIn = json => {
     this.setState({
@@ -132,12 +132,6 @@ class App extends Component {
     });
   };
 
-  displayPlayerInfo = foundPlayer => {
-    this.setState({
-      searchedPlayer: foundPlayer
-    });
-  };
-
   render() {
     // console.log(this.state);
     return (
@@ -151,18 +145,16 @@ class App extends Component {
             allTeams={this.state.allTeams}
           />
           {this.state.loggedIn && localStorage.getItem("token") ? (
-            this.state.searchedPlayer.firstName ? (
-              <PlayerProfile
-                searchedPlayer={this.state.searchedPlayer}
-                allTeams={this.state.allTeams}
+            <div>
+              <Redirect to="/scores" />
+              <Route exact path="/scores" render={() => <GameScores />} />
+              <Route exact path="/roster" render={() => <Roster />} />
+              <Route
+                exact
+                path="/search"
+                render={() => <PlayerSearch allTeams={this.state.allTeams} />}
               />
-            ) : (
-              <div>
-                <Redirect to="/scores" />
-                <Route exact path="/scores" render={() => <GameScores />} />
-                <Route exact path="/roster" render={() => <Roster />} />
-              </div>
-            )
+            </div>
           ) : (
             <Login setUser={this.setUser} />
           )}
