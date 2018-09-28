@@ -78,15 +78,15 @@ class PlayerSearch extends React.Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (this.props !== prevProps) {
-      let team = this.props.allTeams.find(team => {
-        return team.teamId === this.props.searchedPlayer.teamId;
-      });
-      this.setState({
-        team: team.fullName,
-        player: this.props.searchedPlayer
-      });
-    }
+    // if (this.props !== prevProps) {
+    //   let team = this.props.allTeams.find(team => {
+    //     return team.teamId === this.props.searchedPlayer.teamId;
+    //   });
+    //   this.setState({
+    //     team: team.fullName,
+    //     player: this.props.searchedPlayer
+    //   });
+    // }
   };
 
   updatePlayer = e => {
