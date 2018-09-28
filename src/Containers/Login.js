@@ -7,6 +7,7 @@ class Login extends React.Component {
     super();
 
     this.state = {
+      signIn: true,
       firstName: "",
       lastName: "",
       email: "",
@@ -62,10 +63,16 @@ class Login extends React.Component {
       });
   };
 
+  switchMode = () => {
+    this.setState({
+      signIn: !this.state.signIn
+    });
+  };
+
   render() {
     return (
       <div>
-        {this.props.signIn ? (
+        {this.state.signIn ? (
           <form style={{ margin: 100 }} onSubmit={this.loginExistingUser}>
             <div className="form-group">
               <label>Username</label>
@@ -95,6 +102,8 @@ class Login extends React.Component {
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
+            <br />
+            <small onClick={this.switchMode}>SignUp</small>
           </form>
         ) : (
           <form style={{ margin: 100 }} onSubmit={this.saveUser}>
@@ -156,6 +165,8 @@ class Login extends React.Component {
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
+            <br />
+            <small onClick={this.switchMode}>SignIn</small>
           </form>
         )}
       </div>

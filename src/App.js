@@ -1,8 +1,14 @@
 import React, { Component } from "react";
 import "./App.css";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import UserHome from "./Containers/UserHome";
 import LoggedIn from "./Containers/LoggedIn";
 import NotLoggedIn from "./Containers/NotLoggedIn";
+import NavBar from "./Components/NavBar";
+import PlayerProfile from "./Components/PlayerProfile";
+import GameScores from "./Containers/GameScores";
+import Login from "./Containers/Login";
+import SockJS from "sockjs-client";
 
 const baseURL = "http://localhost:3000";
 
@@ -10,14 +16,21 @@ class App extends Component {
   constructor() {
     super();
 
-    this.state = {
-      loggedIn: false,
-      currentUser: {},
-      allTeams: []
-    };
-  }
+    // var sock = new SockJS(baseURL);
+    // sock.onopen = function() {
+    //   console.log("open");
+    //   // sock.send("test");
+    // };
+    //
+    // sock.onmessage = function(e) {
+    //   console.log("message", e.data);
+    //   sock.close();
+    // };
+    //
+    // sock.onclose = function() {
+    //   console.log("close");
+    // };
 
-  componentDidMount() {
     fetch(`${baseURL}/all-teams`)
       .then(res => res.json())
       .then(json => {
@@ -43,13 +56,34 @@ class App extends Component {
           })
         );
     }
+
+    this.state = {
+      loggedIn: false,
+      currentUser: {},
+      allTeams: []
+    };
   }
+
+  componentDidMount() {}
 
   changeToLoggedIn = json => {
     this.setState({
       currentUser: json,
       loggedIn: true
     });
+  };
+
+  setUser = () => {
+    // debugger;
+    fetch(`${baseURL}/user`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+      .then(res => res.json())
+      .then(json => this.changeToLoggedIn(json));
   };
 
   // setUser = () => {
@@ -99,59 +133,71 @@ class App extends Component {
   render() {
     console.log(this.state);
     return (
-      <div>
-        {this.state.loggedIn ? (
-          <LoggedIn
-            displayPlayerInfo={this.displayPlayerInfo}
-            loggedIn={this.state.loggedIn}
-            currentUser={this.state.currentUser}
-            handleLogOut={this.handleLogOut}
-            allTeams={this.state.allTeams}
-          />
-        ) : (
-          <NotLoggedIn
+      <BrowserRouter>
+        <div>
+          <NavBar
             displayPlayerInfo={this.displayPlayerInfo}
             loggedIn={this.state.loggedIn}
             currentUser={this.state.currentUser}
             handleSignIn={this.handleSignIn}
             handleSignUp={this.handleSignUp}
-            changeToLoggedIn={this.changeToLoggedIn}
-            allTeams={this.state.allTeams}
+            handleLogOut={this.handleLogOut}
           />
-        )}
-      </div>
-      // <div>
-      //   <NavBar
-      // displayPlayerInfo={this.displayPlayerInfo}
-      // loggedIn={this.state.loggedIn}
-      // currentUser={this.state.currentUser}
-      // handleSignIn={this.handleSignIn}
-      // handleSignUp={this.handleSignUp}
-      // handleLogOut={this.handleLogOut}
-      //   />
-      //   {this.state.loggedIn ? (
-      //     this.state.playerProfile ? (
-      //       <PlayerProfile
-      //         searchedPlayer={this.state.searchedPlayer}
-      //         allTeams={this.state.allTeams}
-      //       />
-      //     ) : (
-      //       <div>
-      //         <UserHome allTeams={this.state.allTeams} />
-      //       </div>
-      //     )
-      //   ) : this.state.signIn || this.state.signUp ? (
-      //     <Login
-      //       setUser={this.setUser}
-      //       signIn={this.state.signIn}
-      //       signUp={this.state.signUp}
-      //     />
-      //   ) : (
-      //     <LandingPage />
-      //   )}
-      // </div>
+          {this.state.loggedIn ? (
+            <div>
+              <Redirect to="/scores" />
+              <Route exact path="/scores" render={() => <GameScores />} />
+            </div>
+          ) : (
+            <Login setUser={this.setUser} />
+          )}
+        </div>
+      </BrowserRouter>
     );
   }
 }
 
 export default App;
+
+// <div>
+//   {this.state.loggedIn ? (
+//     <LoggedIn
+//       displayPlayerInfo={this.displayPlayerInfo}
+//       loggedIn={this.state.loggedIn}
+//       currentUser={this.state.currentUser}
+//       handleLogOut={this.handleLogOut}
+//       allTeams={this.state.allTeams}
+//     />
+//   ) : (
+//     <NotLoggedIn
+//       displayPlayerInfo={this.displayPlayerInfo}
+//       loggedIn={this.state.loggedIn}
+//       currentUser={this.state.currentUser}
+//       handleSignIn={this.handleSignIn}
+//       handleSignUp={this.handleSignUp}
+//       changeToLoggedIn={this.changeToLoggedIn}
+//       allTeams={this.state.allTeams}
+//     />
+//   )}
+// </div>
+
+// {this.state.loggedIn ? (
+//   this.state.playerProfile ? (
+//     <PlayerProfile
+//       searchedPlayer={this.state.searchedPlayer}
+//       allTeams={this.state.allTeams}
+//     />
+//   ) : (
+//     <div>
+//       <UserHome allTeams={this.state.allTeams} />
+//     </div>
+//   )
+// ) : this.state.signIn || this.state.signUp ? (
+//   <Login
+//     setUser={this.setUser}
+//     signIn={this.state.signIn}
+//     signUp={this.state.signUp}
+//   />
+// ) : (
+//   <UserHome allTeams={this.state.allTeams} />
+// )}
