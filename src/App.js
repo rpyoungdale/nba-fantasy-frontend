@@ -34,6 +34,7 @@ class App extends Component {
 
     this.state = {
       loggedIn: false,
+      loaded: false,
       currentUser: {},
       allTeams: [],
       searchedPlayer: {}
@@ -62,7 +63,8 @@ class App extends Component {
         .then(json =>
           this.setState({
             currentUser: json,
-            loggedIn: true
+            loggedIn: true,
+            loaded: true
           })
         );
     }
@@ -144,20 +146,22 @@ class App extends Component {
             displayPlayerInfo={this.displayPlayerInfo}
             allTeams={this.state.allTeams}
           />
-          {this.state.loggedIn && localStorage.getItem("token") ? (
-            <div>
-              <Redirect to="/scores" />
-              <Route exact path="/scores" render={() => <GameScores />} />
-              <Route exact path="/roster" render={() => <Roster />} />
-              <Route
-                exact
-                path="/search"
-                render={() => <PlayerSearch allTeams={this.state.allTeams} />}
-              />
-            </div>
-          ) : (
-            <Login setUser={this.setUser} />
-          )}
+          {this.state.loaded ? (
+            this.state.loggedIn && localStorage.getItem("token") ? (
+              <div>
+                <Redirect to="/scores" />
+                <Route exact path="/scores" render={() => <GameScores />} />
+                <Route exact path="/roster" render={() => <Roster />} />
+                <Route
+                  exact
+                  path="/search"
+                  render={() => <PlayerSearch allTeams={this.state.allTeams} />}
+                />
+              </div>
+            ) : (
+              <Login setUser={this.setUser} />
+            )
+          ) : null}
         </div>
       </BrowserRouter>
     );

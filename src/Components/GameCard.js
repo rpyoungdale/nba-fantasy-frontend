@@ -1,19 +1,23 @@
 import React from "react";
 
 const GameCard = props => {
-  console.log("GAME", props.gameInfo);
+  // console.log("GAME", props.gameInfo);
   return (
     <div className="card" style={{ width: 300 }}>
       <div className="card-body">
         <h5 className="card-title">
+          {props.gameInfo.vTeam.triCode}
+          <small>
+            ({props.gameInfo.vTeam.win} - {props.gameInfo.vTeam.loss})
+          </small>{" "}
+          vs
           {props.gameInfo.hTeam.triCode}
           <small>
             ({props.gameInfo.hTeam.win} - {props.gameInfo.hTeam.loss})
-          </small>{" "}
-          vs {props.gameInfo.vTeam.triCode}
-          <small>
-            ({props.gameInfo.vTeam.win} - {props.gameInfo.vTeam.loss})
           </small>
+        </h5>
+        <h5>
+          {props.gameInfo.vTeam.score} - {props.gameInfo.hTeam.score}
         </h5>
         <h6 className="card-subtitle mb-2 text-muted">
           {props.gameInfo.arena.city}, {props.gameInfo.arena.stateAbbr}
