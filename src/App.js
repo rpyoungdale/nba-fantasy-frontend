@@ -67,6 +67,10 @@ class App extends Component {
             loaded: true
           })
         );
+    } else {
+      this.setState({
+        loaded: true
+      });
     }
   }
 
@@ -135,7 +139,7 @@ class App extends Component {
   };
 
   render() {
-    // console.log(this.state);
+    console.log("APP", this.state);
     return (
       <BrowserRouter>
         <div>
@@ -151,7 +155,11 @@ class App extends Component {
               <div>
                 <Redirect to="/scores" />
                 <Route exact path="/scores" render={() => <GameScores />} />
-                <Route exact path="/roster" render={() => <Roster />} />
+                <Route
+                  exact
+                  path="/roster"
+                  render={() => <Roster currentUser={this.state.currentUser} />}
+                />
                 <Route
                   exact
                   path="/search"

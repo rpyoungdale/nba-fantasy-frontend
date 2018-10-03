@@ -34,7 +34,7 @@ class GameScores extends React.Component {
     this.scoreInterval = setInterval(() => {
       console.log("RUN");
       this.getScores(`${year}${month}${day}`);
-    }, 5000);
+    }, 10000);
   }
 
   componentWillUnmount() {
