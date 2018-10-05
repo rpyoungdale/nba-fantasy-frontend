@@ -26,7 +26,11 @@ class Roster extends React.Component {
       <div style={{ margin: 100 }}>
         <h1>{this.state.teamName}</h1>
         {this.state.players.map(player => {
-          return <h5 key={player.person_id}>{player.first_name}</h5>;
+          return (
+            <h6 key={player.person_id}>
+              {player.first_name} {player.last_name}
+            </h6>
+          );
         })}
       </div>
     );

@@ -1,5 +1,6 @@
 import React from "react";
 import GameCard from "../Components/GameCard";
+import BoxScore from "../Components/BoxScore";
 import { Dimmer, Loader, Image, Segment } from "semantic-ui-react";
 
 const baseURL = "http://localhost:3000";
@@ -11,7 +12,10 @@ class GameScores extends React.Component {
     this.state = {
       currentDate: "",
       gameList: [],
-      loaded: false
+      loaded: false,
+      boxScoreView: false,
+      boxScoreGame: {},
+      players: []
     };
   }
 
@@ -26,11 +30,15 @@ class GameScores extends React.Component {
     if (day.toString().length === 1) {
       day = "0" + day;
     }
-    this.setState({
-      currentDate: `${year}${month}${day}`
-    });
+    fetch(`${baseURL}/find-player`)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          currentDate: `${year}${month}${day}`,
+          players: json.league.standard
+        });
+      });
     this.getScores(`${year}${month}${day}`);
-
     this.scoreInterval = setInterval(() => {
       console.log("RUN");
       this.getScores(`${year}${month}${day}`);
@@ -62,20 +70,44 @@ class GameScores extends React.Component {
       });
   };
 
+  viewBoxScore = game => {
+    // debugger;
+    this.setState({
+      boxScoreView: true,
+      boxScoreGame: game
+    });
+  };
+
   render() {
-    // console.log(this.state);
+    console.log("SCORES", this.state);
     return (
-      <div style={{ margin: 100 }}>
+      <div>
         {this.state.loaded ? (
-          <div>
-            <h1>{this.state.gameList.length} Games Today</h1>
-            {this.state.gameList.map(game => {
-              return <GameCard key={game.gameId} gameInfo={game} />;
-            })}
+          <div style={{ margin: 100 }}>
+            {this.state.boxScoreView ? (
+              <BoxScore
+                boxScoreGame={this.state.boxScoreGame}
+                players={this.state.players}
+              />
+            ) : (
+              <div>
+                <h1>{this.state.gameList.length} Games Today</h1>
+                {this.state.gameList.map(game => {
+                  return (
+                    <GameCard
+                      key={game.gameId}
+                      gameInfo={game}
+                      players={this.state.players}
+                      viewBoxScore={this.viewBoxScore}
+                    />
+                  );
+                })}
+              </div>
+            )
+            // <Loader active inline="centered" />
+            }
           </div>
-        ) : null
-        // <Loader active inline="centered" />
-        }
+        ) : null}
       </div>
     );
   }
